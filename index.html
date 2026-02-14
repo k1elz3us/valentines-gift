@@ -6,28 +6,45 @@
 <title>My Emi ❤️</title>
 
 <style>
-body {
+* {
     margin: 0;
     padding: 0;
-    height: 100vh;
+    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(-45deg, #ff758c, #ff7eb3, #ff4d6d, #ff8fa3);
-    background-size: 400% 400%;
-    animation: gradientBG 12s ease infinite;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
     text-align: center;
     color: white;
+    position: relative;
 }
 
-@keyframes gradientBG {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+/* 🌙 Blurred Background Image */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url("background.jpg") no-repeat center center/cover;
+    filter: blur(6px);
+    transform: scale(1.1);
+    z-index: -2;
 }
 
+/* Dark overlay */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: -1;
+}
+
+/* Card */
 .card {
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(15px);
@@ -36,20 +53,13 @@ body {
     width: 90%;
     max-width: 500px;
     box-shadow: 0 0 40px rgba(255,255,255,0.2);
+    position: relative;
 }
 
-.screen {
-    display: none;
-}
-
-.active {
-    display: block;
-}
-
-.fade-out {
-    opacity: 0;
-    transition: opacity 1s ease;
-}
+/* Screens */
+.screen { display: none; }
+.active { display: block; }
+.fade-out { opacity: 0; transition: opacity 1s ease; }
 
 input {
     padding: 12px;
@@ -140,8 +150,10 @@ button {
     bottom: 25px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: bold;
+    text-align: center;
+    width: 90%;
     opacity: 0;
     animation: glowFloat 3s ease-in-out infinite alternate, fadeIn 2s forwards;
 }
@@ -208,10 +220,8 @@ button {
 
 </div>
 
-<!-- Your music -->
 <audio id="loveSong" loop>
     <source src="kumpas.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
 </audio>
 
 <script>
