@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Emi ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(-45deg, #ff758c, #ff7eb3, #ff4d6d, #ff8fa3);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    text-align: center;
+    color: white;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    padding: 30px;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.2);
+}
+
+.screen {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+input {
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    text-align: center;
+    width: 80%;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+#enterBtn {
+    background: white;
+    color: #ff4d6d;
+}
+
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 10px #fff; }
+    to { box-shadow: 0 0 25px #fff; }
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+}
+
+#noBtn {
+    background: white;
+    color: #ff4d6d;
+    position: absolute;
+}
+
+.loader-bar {
+    width: 220px;
+    height: 10px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    margin: 15px auto;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: white;
+    animation: load 3s forwards;
+}
+
+@keyframes load {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+.final-message {
+    position: absolute;
+    width: 90%;
+    max-width: 700px;
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    padding: 20px;
+    color: white;
+    opacity: 0;
+    animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.signature {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.4rem;
+    font-weight: bold;
+    opacity: 0;
+    animation: glowFloat 3s ease-in-out infinite alternate, fadeIn 2s forwards;
+}
+
+@keyframes glowFloat {
+    from {
+        text-shadow: 0 0 5px white;
+        transform: translateX(-50%) translateY(0px);
+    }
+    to {
+        text-shadow: 0 0 25px white;
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+.firework {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(15); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+    button {
+        width: 80%;
+        margin: 8px auto;
+        display: block;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div id="passwordScreen" class="screen active">
+    <h2>🔐 Private Love Message</h2>
+    <input type="password" id="passwordInput" placeholder="Enter password...">
+    <button id="enterBtn">Unlock ❤️</button>
+    <p id="error" style="color: yellow;"></p>
+</div>
+
+<div id="loadingScreen" class="screen">
+    <h2>💻 Connecting to Emi's Heart...</h2>
+    <p>Ay wow! Alam na Alam! ❤️</p>
+    <div class="loader-bar">
+        <div class="progress"></div>
+    </div>
+</div>
+
+<div id="mainScreen" class="screen">
+    <h2>Happy Valentine's Day, my Love ❤️</h2>
+    <p>Will you still be my Valentine? 🥺 (Kala mo may choice sya! Lol)</p>
+    <button id="yesBtn">YES 😘</button>
+    <button id="noBtn">No 🙄</button>
+</div>
+
+</div>
+
+<!-- Your music -->
+<audio id="loveSong" loop>
+    <source src="kumpas.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+const correctPassword = "palagi";
+
+const passwordScreen = document.getElementById("passwordScreen");
+const loadingScreen = document.getElementById("loadingScreen");
+const mainScreen = document.getElementById("mainScreen");
+
+const enterBtn = document.getElementById("enterBtn");
+const passwordInput = document.getElementById("passwordInput");
+const error = document.getElementById("error");
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const loveSong = document.getElementById("loveSong");
+
+enterBtn.addEventListener("click", () => {
+    if (passwordInput.value.toLowerCase() === correctPassword) {
+        passwordScreen.classList.remove("active");
+        loadingScreen.classList.add("active");
+
+        // Start music softly after correct password
+        loveSong.volume = 0;
+        loveSong.play().catch(() => {});
+        let volume = 0;
+        const fadeInterval = setInterval(() => {
+            if(volume < 1){
+                volume += 0.01;
+                loveSong.volume = volume;
+            } else {
+                clearInterval(fadeInterval);
+            }
+        }, 50);
+
+        setTimeout(() => {
+            loadingScreen.classList.remove("active");
+            mainScreen.classList.add("active");
+        }, 3000);
+    } else {
+        error.innerHTML = "Luh! 😤 Talaga baaaaaaaa?!";
+    }
+});
+
+noBtn.addEventListener("mouseover", moveNoButton);
+noBtn.addEventListener("touchstart", moveNoButton);
+
+function moveNoButton() {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+yesBtn.addEventListener("click", () => {
+    mainScreen.classList.add("fade-out");
+
+    setTimeout(() => {
+        mainScreen.style.display = "none";
+        launchFireworks();
+        showFinalMessage();
+    }, 1000);
+});
+
+function showFinalMessage() {
+    const finalDiv = document.createElement("div");
+    finalDiv.classList.add("final-message");
+    document.body.appendChild(finalDiv);
+
+    const message = `Hmmmm, Love. From the moment you came into my life, everything felt lighter and brighter. 
+Parang biglang nagkaroon ng kulay yung mga ordinaryong araw ko. Well, sinabi ko naman na to sayo noon pa. 
+Yung smile ng mga mata mo tuwing magka VC tayo (naging favorite view ko), yung tawa mo pag nagjojoke ako 
+(naging favorite sound ko), at yung simpleng "How are you?" mo (became my favorite reminder that someone 
+truly cares about me.) Love, I love how you love, how you support me, how you believe in me, paano mo ko 
+alagaan which is gustong gusto ko. Sorry Love, walang flowers ha. Thank you so much, Love. Thank you sa 
+pag-intindi sakin, thank you sa pag-aalaga, pagmamahal araw-araw. I just want you to know that yes, ikaw at 
+ikaw lang, walang iba. I choose you today, tomorrow, and in all the days after that. I will love you in the 
+quiet moments, in the loud celebrations, in the simple ordinary days, and even in the challenging seasons. 
+Mahal na Mahal na Mahal kita, aking Palagi. ❤️`;
+
+    let i = 0;
+
+    function typing() {
+        if (i < message.length) {
+            finalDiv.innerHTML += message.charAt(i);
+            i++;
+            setTimeout(typing, 25);
+        } else {
+            showSignature();
+        }
+    }
+
+    typing();
+}
+
+function showSignature() {
+    const signature = document.createElement("div");
+    signature.classList.add("signature");
+    signature.innerHTML = "❤️ Ikaw yung Kumpas, nung naliligaw. Naging kulay ka sa langit na bughaw. Sa bawat bagyo na dumayo, ikaw yung Kanlungan na nahanap ko. Kahit nung di ko alam, ilang beses mo akong niligtas. Ikaw ang hantungan, at aking Wakas ❤️";
+    document.body.appendChild(signature);
+}
+
+function launchFireworks() {
+    for (let i = 0; i < 60; i++) {
+        const firework = document.createElement("div");
+        firework.classList.add("firework");
+        firework.style.left = Math.random() * 100 + "vw";
+        firework.style.top = Math.random() * 100 + "vh";
+        firework.style.background = `hsl(${Math.random() * 360},100%,70%)`;
+        document.body.appendChild(firework);
+
+        setTimeout(() => {
+            firework.remove();
+        }, 1000);
+    }
+}
+</script>
+
+</body>
+</html>
